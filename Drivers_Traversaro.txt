@@ -1,0 +1,27 @@
+#ifndef YFS201_H
+#define YFS201_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+uint8_t pps= 0;
+
+//en esta funcion se inicializa el pin 
+//como pioOut, ademas se habilita int
+// para poder registrar los pulsos enviados
+//por el sensor 
+void YFS201_Init(gpionum vout_pin);
+
+// estimando la sensibilidad del sensor, se puede conocer
+// el flujo/min del fluido circundante
+int YFS201_flujo(void);
+
+//integrando el valor obtenido en YFS201_flujo, se determina
+// el volumen del fluido circundante
+int YFS201_volumen(void);
+
+void YFS201_deInit(gpionum vout_pin);
+
