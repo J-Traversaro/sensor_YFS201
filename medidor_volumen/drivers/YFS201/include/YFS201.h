@@ -36,7 +36,7 @@ uint8_t YFS201_flujo(void);
 /// @brief 
 /// @param  
 /// @return 
-uint8_t YFS201_volumen(void);
+float YFS201_volumen(void);
 
 
 

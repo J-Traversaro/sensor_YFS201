@@ -26,7 +26,7 @@ gpio_config_t led3 = {};
 #define VOL_FIN 10 // L
 QueueHandle_t queue = NULL;
 gptimer_handle_t gptimer_1 = NULL;
-uint8_t vol_min = 0;
+float vol_min = 0;
 /*---------------------------------------------------------------
        INITS
 ---------------------------------------------------------------*/
@@ -44,41 +44,45 @@ void app_main(void)
     {
 
         if (inicio == true)
-        {
+        {  
+            YFS201_flujo();
             inicio = false;
-            printf("Volumen min: %u\n", vol_min);
-            if (vol_min <= VOL_FIN)
+            vol_min = YFS201_volumen();
+            printf("Volumen min [L/min]: %f\n", vol_min);
+            
+              if (vol_min <= VOL_FIN)
             {
                 if (vol_min <= 2)
                 {
                     gpio_set_level(LED_1, 1);
                     gpio_set_level(LED_2, 0);
-                    gpio_set_level(LED_3, 0);
+                    
                 }
                 if (vol_min >= 2 && vol_min <= 6)
                 {
                     gpio_set_level(LED_1, 1);
                     gpio_set_level(LED_2, 1);
-                    gpio_set_level(LED_3, 0);
+                    
                 }
                 if (vol_min >= 6 && vol_min <= 9)
                 {
-                    gpio_set_level(LED_1, 1);
+                    gpio_set_level(LED_1, 0);
                     gpio_set_level(LED_2, 1);
-                    gpio_set_level(LED_3, 1);
+                    
                 }
 
-                /* code */
+               
             }
             else
             {
                 if (vol_min > VOL_FIN)
                 {
                     gpio_set_level(LED_1, 0);
-                    gpio_set_level(LED_2, 0);
-                    gpio_set_level(LED_3, 1);
+                    gpio_set_level(LED_2, 1);
+                    
                 }
             }
+                      
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));
@@ -87,8 +91,7 @@ void app_main(void)
 // ppm print
 static bool IRAM_ATTR alarma_act_leds(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
 {
-    YFS201_flujo();
-    vol_min = YFS201_volumen();
+   
     inicio = true;
 
     return true;

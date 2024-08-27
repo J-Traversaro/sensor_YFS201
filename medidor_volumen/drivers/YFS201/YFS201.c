@@ -8,13 +8,13 @@
 gpio_config_t YFS201 = {};
 
 // del datasheet --> Frequency (Hz) = 7.5 * Flow rate (L/min)
-float sensibilidad= 0.134; //ppm*sensibilidad=lpm
+float sensibilidad= 0.00390; //ppm*sensibilidad=lpm
 
 volatile uint8_t ppm= 0;// pulsos por minuto
 
 
 uint8_t auxiliar=0;
-uint8_t volumen=0;
+float volumen=0;
 
 // se inicia la interrupción cuando se activa el boton. Finaiza del mismo modo
 static void IRAM_ATTR isr_handler(void *args)
@@ -58,8 +58,9 @@ uint8_t YFS201_flujo(void)
     return auxiliar;
 }
 
-uint8_t YFS201_volumen(void)
-{   volumen=sensibilidad*auxiliar;
+float YFS201_volumen(void)
+{   
+    volumen=sensibilidad*auxiliar;
     return volumen;
 }
 
